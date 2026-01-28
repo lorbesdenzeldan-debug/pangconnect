@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pang-Connect</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Georgia, serif;
+}
+
+html,body{
+    width:100%;
+    min-height:100vh;
+}
+
+body{
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:#fff;
+}
+
+/* ===== CONTAINER ===== */
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:40px;
+    position:relative;
+}
+
+/* ===== PAGE SYSTEM ===== */
+.page{display:none;}
+.active{display:block;}
+
+.center{text-align:center;margin-top:80px}
+
+/* ===== INPUTS ===== */
+input, select, textarea{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border-radius:8px;
+    border:none;
+}
+
+/* ===== BUTTONS ===== */
+.btn{
+    padding:14px 28px;
+    border:none;
+    border-radius:10px;
+    background:#fff;
+    color:#333;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.btn:hover{background:#eaeaea}
+
+.link{
+    margin-top:12px;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+/* ===== HEADER ===== */
+.header{
+    display:flex;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.back{
+    font-size:22px;
+    cursor:pointer;
+}
+
+.title{
+    flex:1;
+    text-align:center;
+    font-size:28px;
+}
+
+/* ===== AVATAR ===== */
+.avatar{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#fff;
+    position:absolute;
+    top:30px;
+    right:40px;
+    cursor:pointer;
+}
+
+/* ===== DASHBOARD ===== */
+.dashboard{
+    margin-top:60px;
+    max-width:600px;
+    margin-left:auto;
+    margin-right:auto;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.dashboard-btn{
+    background:#fff;
+    color:#333;
+    padding:22px;
+    border-radius:16px;
+    text-align:center;
+    font-size:18px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.dashboard-btn:hover{
+    transform:translateY(-3px);
+}
+
+.dashboard-row{
+    display:flex;
+    gap:18px;
+}
+
+.dashboard-row .dashboard-btn{
+    flex:1;
+}
+
+/* ===== UPDATES ===== */
+.updates-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:24px;
+}
+
+.update-card{
+    background:#fff;
+    color:#333;
+    border-radius:16px;
+    padding:16px;
+}
+
+.img-box{
+    height:140px;
+    background:#ccc;
+    border-radius:12px;
+    margin-bottom:12px;
+}
+
+/* ===== POSTS ===== */
+.post{
+    background:#fff;
+    color:#333;
+    padding:16px;
+    border-radius:12px;
+    margin-bottom:12px;
+}
+
+/* ===== PROFILE ===== */
+.profile-wrap{
+    display:flex;
+    gap:30px;
+}
+
+.big-avatar{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:#fff;
+}
+
+/* ===== EMERGENCY ===== */
+.redline{
+    height:4px;
+    background:red;
+    margin:20px 0;
+}
+
+.hotline{
+    display:flex;
+    justify-content:space-between;
+    margin:12px 0;
+    font-size:18px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<!-- LOGIN -->
+<div class="page active" id="loginPage">
+    <div class="center">
+        <h2>Pang-Connect</h2><br>
+        <input id="loginName" placeholder="Name">
+        <input type="password" placeholder="Password"><br><br>
+        <button class="btn" onclick="login()">Login</button>
+        <div class="link" onclick="openPage('registerPage')">No account? Register</div>
+    </div>
+</div>
+
+<!-- REGISTER -->
+<div class="page" id="registerPage">
+    <div class="header">
+        <div class="back" onclick="openPage('loginPage')">←</div>
+        <div class="title">Register</div>
+    </div>
+
+    <input placeholder="Full Name">
+    <input placeholder="Password">
+    <input placeholder="Contact Number">
+    <input type="number" placeholder="Age">
+
+    <select disabled><option>DAGUPAN CITY</option></select>
+
+    <select id="zoneSelect" onchange="updateBarangays()">
+        <option value="">Select Zone</option>
+        <option value="1">ZONE 1</option>
+        <option value="2">ZONE 2</option>
+        <option value="3">ZONE 3</option>
+        <option value="4">ZONE 4</option>
+        <option value="5">ZONE 5</option>
+    </select>
+
+    <select id="barangaySelect">
+        <option>Select Barangay</option>
+    </select><br><br>
+
+    <button class="btn" onclick="openPage('loginPage')">Create Account</button>
+</div>
+
+<!-- MAIN DASHBOARD -->
+<div class="page" id="mainPage">
+    <div class="avatar" onclick="openPage('profilePage')"></div>
+
+    <h2>Pang-Connect</h2>
+    <small id="userLabel">Name of Barangay</small>
+
+    <div class="dashboard">
+        <div class="dashboard-btn" onclick="openPage('updatesPage')">Local Updates</div>
+        <div class="dashboard-btn" onclick="openPage('reportPage')">Report Issue</div>
+        <div class="dashboard-btn" onclick="openPage('forumPage')">Community Forum</div>
+
+        <div class="dashboard-row">
+            <div class="dashboard-btn" onclick="openPage('aboutPage')">About Us</div>
+            <div class="dashboard-btn" onclick="openPage('emergencyPage')">Emergency Access</div>
+        </div>
+    </div>
+</div>
+
+<!-- PROFILE -->
+<div class="page" id="profilePage">
+    <div class="header">
+        <div class="back" onclick="openPage('mainPage')">←</div>
+        <div class="title">Profile</div>
+    </div>
+
+    <div class="profile-wrap">
+        <div class="big-avatar"></div>
+        <div style="flex:1">
+            <label>Name</label>
+            <input id="profileName">
+            <label>Age</label>
+            <input>
+            <label>Contact No</label>
+            <input>
+            <label>Address</label>
+            <input>
+        </div>
+    </div>
+
+    <br>
+    <button class="btn">Change Password</button>
+    <button class="btn" onclick="openPage('loginPage')">Log Out</button>
+</div>
+
+<!-- UPDATES -->
+<div class="page" id="updatesPage">
+    <div class="header">
+        <div class="back" onclick="openPage('mainPage')">←</div>
+        <div class="title">Local Updates</div>
+    </div>
+
+    <div class="updates-grid">
+        <div class="update-card"><div class="img-box"></div><b>Barangay Cleanup</b><br>Scheduled this weekend.</div>
+        <div class="update-card"><div class="img-box"></div><b>Water Advisory</b><br>Temporary interruption.</div>
+        <div class="update-card"><div class="img-box"></div><b>Medical Mission</b><br>Free check-up.</div>
+        <div class="update-card"><div class="img-box"></div><b>Curfew Reminder</b><br>10 PM onwards.</div>
+    </div>
+</div>
+
+<!-- COMMUNITY FORUM -->
+<div class="page" id="forumPage">
+    <div class="header">
+        <div class="back" onclick="openPage('mainPage')">←</div>
+        <div class="title">Community Forum</div>
+    </div>
+
+    <h3>Suggestions</h3>
+    <div class="post">💡 Need more street lights in Zone 3</div>
+    <div class="post">💡 Repair of covered court</div>
+
+    <h3 style="margin-top:30px;">Feedback</h3>
+    <div class="post">✅ Fast response from barangay</div>
+    <div class="post">✅ Clean evacuation center</div>
+</div>
+
+<!-- REPORT -->
+<div class="page" id="reportPage">
+    <div class="header">
+        <div class="back" onclick="openPage('mainPage')">←</div>
+        <div class="title">Report Issue</div>
+    </div>
+
+    <textarea placeholder="Describe issue..."></textarea><br><br>
+    <button class="btn">Submit</button>
+</div>
+
+<!-- ABOUT -->
+<div class="page" id="aboutPage">
+    <div class="header">
+        <div class="back" onclick="openPage('mainPage')">←</div>
+        <div class="title">About Us</div>
+    </div>
+    <p>Pang-Connect links residents to barangay services.</p>
+</div>
+
+<!-- EMERGENCY -->
+<div class="page" id="emergencyPage">
+    <div class="header">
+        <div class="back" onclick="openPage('mainPage')">←</div>
+        <div class="title">Emergency Access</div>
+    </div>
+
+    <div class="redline"></div>
+    <b>HOTLINES</b>
+    <div class="redline"></div>
+
+    <div class="hotline"><span>Fire</span><span>09927609821</span></div>
+    <div class="hotline"><span>PNP</span><span>09927609821</span></div>
+</div>
+
+</div>
+
+<script>
+function openPage(id){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+function login(){
+    const name=document.getElementById("loginName").value;
+    document.getElementById("userLabel").innerText=name || "Name of Barangay";
+    document.getElementById("profileName").value=name;
+    openPage('mainPage');
+}
+
+const barangaysByZone={
+    1:["Barangay I (T. Bugallon)","Barangays II & III (Nueva)","Barangay IV (Zamora)","Herrero-Perez","Pantal","Poblacion Oeste"],
+    2:["Bonuan Binloc","Bonuan Boquig","Bonuan Gueset"],
+    3:["Calmay","Carael","Lomboy","Pugaro Suit","Salapingao"],
+    4:["Bacayao Norte","Bacayao Sur","Lasip Chico","Lasip Grande","Lucao","Malued","Pogo Chico","Pogo Grande","Tapuac"],
+    5:["Bolosan","Caranglaan","Mamalingling","Mangin","Mayombo","Salisay","Tambac","Tebeng"]
+};
+
+function updateBarangays(){
+    const z=document.getElementById("zoneSelect").value;
+    const b=document.getElementById("barangaySelect");
+    b.innerHTML='<option>Select Barangay</option>';
+    if(barangaysByZone[z]){
+        barangaysByZone[z].forEach(x=>{
+            const o=document.createElement("option");
+            o.textContent=x;
+            b.appendChild(o);
+        });
+    }
+}
+</script>
+
+</body>
+</html>
